@@ -6,6 +6,7 @@ pipeline {
         SONARQUBE_PROJECT_KEY = 'joda-time'
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'  // Set the correct Java path
         PATH = "${JAVA_HOME}/bin:${env.PATH}"  // Ensure Java binaries are available in PATH
+        SONARQUBE_TOKEN = 'your-sonar-token'  // Pass your SonarQube token directly here
     }
 
     stages {
@@ -24,7 +25,8 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('myserver') {  // Ensure 'myserver' is correctly configured in Jenkins
-                    sh 'mvn sonar:sonar'
+                    // Pass token for authentication
+                    sh "mvn sonar:sonar -Dsonar.login=${SONARQUBE_TOKEN}"
                 }
             }
         }
