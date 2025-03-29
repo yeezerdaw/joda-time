@@ -6,7 +6,8 @@ pipeline {
         SONARQUBE_PROJECT_KEY = 'joda-time'
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'  // Set the correct Java path
         PATH = "${JAVA_HOME}/bin:${env.PATH}"  // Ensure Java binaries are available in PATH
-        SONARQUBE_TOKEN = 'your-sonar-token'  // Pass your SonarQube token directly here
+        SONARQUBE_TOKEN = 'squ_f9914977197b94b997e4ddb93f77b0a19ca4d9c9'
+
     }
 
     stages {
@@ -25,8 +26,8 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('myserver') {  // Ensure 'myserver' is correctly configured in Jenkins
-                    // Pass token for authentication
-                    sh "mvn sonar:sonar -Dsonar.login=${squ_f9914977197b94b997e4ddb93f77b0a19ca4d9c9}"
+                    // Pass token for authentication directly
+                    sh "mvn sonar:sonar -Dsonar.login=${SONARQUBE_TOKEN}"
                 }
             }
         }
@@ -46,6 +47,13 @@ pipeline {
         stage('Docker Run') {
             steps {
                 sh 'docker run -d --name joda-container joda-time'
+                script {
+                    // Check if the Docker container is running
+                    def isRunning = sh(script: 'docker ps -q -f name=joda-container', returnStdout: true).trim()
+                    if (!isRunning) {
+                        error 'Docker container is not running as expected!'
+                    }
+                }
             }
         }
     }
