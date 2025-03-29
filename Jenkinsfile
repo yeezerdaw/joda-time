@@ -4,6 +4,8 @@ pipeline {
     environment {
         SONARQUBE_SERVER = 'myserver'  // Ensure this matches the Jenkins configuration
         SONARQUBE_PROJECT_KEY = 'joda-time'
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'  // Set the correct Java path
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"  // Ensure Java binaries are available in PATH
     }
 
     stages {
