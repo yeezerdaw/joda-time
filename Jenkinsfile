@@ -26,7 +26,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('myserver') {  // Ensure 'myserver' is correctly configured in Jenkins
                     // Pass token for authentication
-                    sh "mvn sonar:sonar -Dsonar.login=${SONARQUBE_TOKEN}"
+                    sh "mvn sonar:sonar -Dsonar.login=${squ_f9914977197b94b997e4ddb93f77b0a19ca4d9c9}"
                 }
             }
         }
