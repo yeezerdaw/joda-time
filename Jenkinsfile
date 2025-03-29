@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/yeezerdaw/joda-time.git'
+                git branch: 'main', url: 'https://github.com/yeezerdaw/joda-time.git'
             }
         }
 
