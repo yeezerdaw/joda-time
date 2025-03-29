@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_SERVER = 'myserver'
+        SONARQUBE_SERVER = 'myserver'  // Ensure this matches the Jenkins configuration
         SONARQUBE_PROJECT_KEY = 'joda-time'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/JodaOrg/joda-time.git', branch: 'master'
+                git 'https://github.com/yeezerdaw/joda-time.git'
             }
         }
 
@@ -21,7 +21,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {
+                withSonarQubeEnv('myserver') {  // Ensure 'myserver' is correctly configured in Jenkins
                     sh 'mvn sonar:sonar'
                 }
             }
@@ -29,7 +29,13 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t joda-time .'
+                script {
+                    if (fileExists('Dockerfile')) {
+                        sh 'docker build -t joda-time .'
+                    } else {
+                        error 'Dockerfile not found! Please add one to the repository.'
+                    }
+                }
             }
         }
 
